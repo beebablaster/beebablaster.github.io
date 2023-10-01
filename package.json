@@ -10,13 +10,10 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.6",
-    "@chakra-ui/react": "^2.8.1",
-    "@chakra-ui/next-js": "^2.1.5",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "react-redux": "^8.1.2",
-    "react-hook-form": "^7.46.2"
+    "react-redux": "^8.1.2"
   },
   "devDependencies": {
     "@types/node": "latest",
