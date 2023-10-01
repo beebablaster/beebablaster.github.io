@@ -5,3 +5,4 @@ Used frameworks:
 - [Next.js](https://nextjs.org/)
 - [React Redux](https://react-redux.js.org/)
 - [Chakra UI](https://nextjs.org/)
+- [React Hook Form](https://react-hook-form.com/)

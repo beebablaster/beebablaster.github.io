@@ -26,8 +26,10 @@ export default function RegistrationForm() {
     const {
         handleSubmit,
         register,
-        formState: { errors, isSubmitting },
-    } = useForm()
+        formState: { errors, isSubmitting, isDirty, isValid },
+    } = useForm({
+        mode: 'onChange'
+    })
 
     const onSubmit = (values) => {
         return new Promise((resolve) => {
@@ -37,6 +39,8 @@ export default function RegistrationForm() {
             }, 3000)
         })
     }
+
+    console.log(isValid)
 
     return (
         <Card>
@@ -123,7 +127,8 @@ export default function RegistrationForm() {
                             <Checkbox isChecked={checkboxIsClicked} whiteSpace='wrap' onChange={() => setCheckboxIsClicked(!checkboxIsClicked)}>
                                  I agree to having my  <br />personal data processed
                             </Checkbox>
-                            <Button type='submit' colorScheme='teal'>Register</Button>
+                            {(isValid && checkboxIsClicked) ? <Button type='submit' colorScheme='teal'>Register</Button> :
+                                <Button type='submit' disabled={true}>Register</Button>}
                         </Flex>
                     </Flex>
                     </form>
