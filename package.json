@@ -14,7 +14,6 @@
     "react": "latest",
     "react-dom": "latest",
     "react-redux": "^8.1.2",
-    "react-hook-form": "latest"
   },
   "devDependencies": {
     "@types/node": "latest",
