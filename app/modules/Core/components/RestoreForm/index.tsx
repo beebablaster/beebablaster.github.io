@@ -21,7 +21,7 @@ export default function RestoreForm() {
     const {
         handleSubmit,
         register,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm()
 
     const onSubmit = (values) => {
@@ -48,7 +48,10 @@ export default function RestoreForm() {
                                            placeholder='+7 (777) 777 77 77'
                                            {...register('number', {
                                                required: 'Phone number is required',
-                                               pattern: /\+\d\s\([0-9]+\)\s[0-9]+\s[0-9]+\s[0-9]+/i,
+                                               pattern: {
+                                                   value: /\+\d\s\([0-9]+\)\s[0-9]+\s[0-9]+\s\d\d/i,
+                                                   message: 'Invalid number format',
+                                               },
                                                minLength: { value: 11, message: 'Number must be of the following format: +7 (777) 777 77 77' },
                                                maxLength: { value: 18, message: 'Number must be of the following format: +7 (777) 777 77 77'},
                                            })}

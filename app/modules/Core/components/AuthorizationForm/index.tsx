@@ -14,7 +14,7 @@ import {
     Text
 } from "@chakra-ui/react"
 import NextLink from 'next/link'
-import { useForm } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 import {useState} from "react"
 
 export default function AuthorizationForm() {
@@ -23,8 +23,11 @@ export default function AuthorizationForm() {
     const {
         handleSubmit,
         register,
-        formState: { errors, isSubmitting },
-    } = useForm()
+        control,
+        formState: { errors },
+    } = useForm({
+        mode: 'onChange'
+    })
 
     const onSubmit = (values) => {
         return new Promise((resolve) => {
@@ -46,50 +49,60 @@ export default function AuthorizationForm() {
                            <Flex direction='column' gap='4px'>
                                <Text>Your number</Text>
                                <FormControl isInvalid={errors.number}>
-                               <Input id='number'
-                                      placeholder='+7 (777) 777 77 77'
-                                      {...register('number', {
-                                          required: 'Phone number is required',
-                                          pattern: /\+\d\s\([0-9]+\)\s[0-9]+\s[0-9]+\s[0-9]+/i,
-                                          minLength: { value: 11, message: 'Number must be of the following format: +7 (777) 777 77 77' },
-                                          maxLength: { value: 18, message: 'Number must be of the following format: +7 (777) 777 77 77'},
-                                      })}
-                               />
+                                   <Controller
+                                       name='number'
+                                       control={control}
+                                       defaultValue=""
+                                       rules={{
+                                           required: 'Phone number is required',
+                                           pattern: {
+                                               value: /\+\d\s\([0-9]+\)\s[0-9]+\s[0-9]+\s\d\d/i,
+                                               message: 'Invalid number format',
+                                           },
+                                           minLength: { value: 11, message: 'Number must be of the following format: +7 (777) 777 77 77' },
+                                           maxLength: { value: 18, message: 'Number must be of the following format: +7 (777) 777 77 77'},
+                                       }}
+                                       render={({ field }) => (
+                                           <Input {...field} placeholder='+7 (777) 777 77 77' />
+                                       )}/>
                                <FormErrorMessage>
                                    {errors.number && errors.number.message}
                                </FormErrorMessage>
                                </FormControl>
                            </Flex>
-                           <Flex direction='column' gap='4px'>
-                               <Text>Your password</Text>
-                               <FormControl isInvalid={errors.password}>
-                                   <InputGroup>
-                               <Input id='password'
-                                   placeholder='Enter password'
-                                   type={show ? 'text' : 'password'}
-                                   {...register('password', {
-                                       required: 'Password is required',
-                                       minLength: { value: 5, message: 'Your password must be at least 5 characters long' },
-                                   })}
-                               />
-                               <InputRightElement width='4.5rem'>
-                                   <Button size='xs' onClick={() => setShow(!show)}>
-                                       {show ? 'Hide' : 'Show'}
-                                   </Button>
-                               </InputRightElement>
-                                   </InputGroup>
-                               <FormErrorMessage>
-                                   {errors.password && errors.password.message}
-                               </FormErrorMessage>
-                               </FormControl>
-                           </Flex>
+                           {!errors.number && (
+                               <Flex direction='column' gap='4px'>
+                                   <Text>Your password</Text>
+                                   <FormControl isInvalid={errors.password}>
+                                       <InputGroup>
+                                           <Input id='password'
+                                                  placeholder='Enter password'
+                                                  type={show ? 'text' : 'password'}
+                                                  {...register('password', {
+                                                      required: 'Password is required',
+                                                      minLength: { value: 5, message: 'Your password must be at least 5 characters long' },
+                                                  })}
+                                           />
+                                           <InputRightElement width='4.5rem'>
+                                               <Button size='xs' onClick={() => setShow(!show)}>
+                                                   {show ? 'Hide' : 'Show'}
+                                               </Button>
+                                           </InputRightElement>
+                                       </InputGroup>
+                                       <FormErrorMessage>
+                                           {errors.password && errors.password.message}
+                                       </FormErrorMessage>
+                                   </FormControl>
+                               </Flex>
+                           )}
                        </Flex>
 
                        <Flex justifyContent='space-between' gap='64px'>
                        <Link as={NextLink} href='/restore'>
                            Forgot your password?
                        </Link>
-                           <Button type='submit' colorScheme='teal'>Login</Button>
+                           {!errors.number ? <Button type='submit' colorScheme='teal'>Login</Button> :
+                               <Button type='submit' colorScheme='teal'>Register</Button>}
                        </Flex>
                    </Flex>
                    </form>

@@ -26,10 +26,8 @@ export default function RegistrationForm() {
     const {
         handleSubmit,
         register,
-        formState: { errors, isSubmitting, isDirty, isValid },
-    } = useForm({
-        mode: 'onChange'
-    })
+        formState: { errors, isValid },
+    } = useForm()
 
     const onSubmit = (values) => {
         return new Promise((resolve) => {
@@ -39,8 +37,6 @@ export default function RegistrationForm() {
             }, 3000)
         })
     }
-
-    console.log(isValid)
 
     return (
         <Card>
@@ -57,7 +53,10 @@ export default function RegistrationForm() {
                                            placeholder='+7 (777) 777 77 77'
                                            {...register('number', {
                                                required: 'Phone number is required',
-                                               pattern: /\+\d\s\([0-9]+\)\s[0-9]+\s[0-9]+\s[0-9]+/i,
+                                               pattern: {
+                                                   value: /\+\d\s\([0-9]+\)\s[0-9]+\s[0-9]+\s\d\d/i,
+                                                   message: 'Invalid number format',
+                                               },
                                                minLength: { value: 11, message: 'Number must be of the following format: +7 (777) 777 77 77' },
                                                maxLength: { value: 18, message: 'Number must be of the following format: +7 (777) 777 77 77'},
                                            })}
@@ -74,7 +73,10 @@ export default function RegistrationForm() {
                                            placeholder='Your name'
                                            {...register('name', {
                                                required: 'Name is required',
-                                               pattern: /^[a-z ,.'-]+$/i,
+                                               pattern: {
+                                                   value: /^[a-z ,.'-]+$/i,
+                                                   message: 'Invalid name format'
+                                               },
                                                minLength: { value: 2, message: 'Name must be at least 2 characters long' },
                                            })}
                                     />
@@ -90,7 +92,10 @@ export default function RegistrationForm() {
                                            placeholder='Your Email'
                                            {...register('email', {
                                                required: 'Email is required',
-                                               pattern: /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/,
+                                               pattern: {
+                                                   value: /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/,
+                                                   message: 'Invalid Email format'
+                                               },
                                                minLength: { value: 3, message: 'Email must be of the following format: hello@example.com' },
                                            })}
                                     />
