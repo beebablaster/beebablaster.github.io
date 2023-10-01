@@ -1,5 +1,5 @@
 import { ChakraProvider, Flex } from "@chakra-ui/react";
-import AuthorizationForm from "../modules/Core/components/AuthorizationForm/index";
+import AuthorizationForm from "./modules/Core/components/AuthorizationForm/index";
 
 export default function Home() {
   return (
