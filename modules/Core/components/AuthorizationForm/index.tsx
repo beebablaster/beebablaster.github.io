@@ -1,5 +1,6 @@
-import {Button, Card, CardBody, Flex, Heading, Input, Link} from "@chakra-ui/react";
+import {Button, Card, CardBody, Flex, Heading, Link} from "@chakra-ui/react";
 import NextLink from 'next/link'
+import InputForm from "../presentational/InputForm/index";
 
 export default function AuthorizationForm() {
 
@@ -8,13 +9,11 @@ export default function AuthorizationForm() {
         <Card>
             <CardBody>
                <Flex direction='column' gap='32px'>
-               <Heading>Enter your number:</Heading>
+               <Heading>Sign in</Heading>
                    <Flex direction='column' gap='32px'>
-                       <Flex direction='column' gap='12px'>
-               <Input placeholder='+7 (777) 777 77 77'/>
-               {isPasswordFieldShown && (
-                   <Input placeholder='******'/>
-               )}
+                       <Flex direction='column' gap='16px'>
+                           <InputForm heading={'Your number'} placeholder={'+7 (777) 777 77 77'}/>
+                           {isPasswordFieldShown && <InputForm heading={'Your password'} placeholder={'*******'}/>}
                        </Flex>
                        <Flex justifyContent='space-between'>
                        <Link as={NextLink} href='/restore'>
