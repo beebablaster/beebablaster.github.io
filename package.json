@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.6",
-    "@chakra-ui": "latest",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
