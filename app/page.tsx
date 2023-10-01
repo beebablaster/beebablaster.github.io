@@ -1,10 +1,12 @@
-import styles from './page.module.css'
-import AuthorizationForm from "./modules/Core/components/AuthorizationForm/index";
+import { ChakraProvider, Flex } from "@chakra-ui/react";
+import AuthorizationForm from "../modules/Core/components/AuthorizationForm/index";
 
 export default function Home() {
   return (
-    <main className={styles.main}>
-      <AuthorizationForm/>
-    </main>
+      <ChakraProvider>
+          <Flex height='100vh' alignItems='center' justifyContent='center'>
+        <AuthorizationForm/>
+          </Flex>
+      </ChakraProvider>
   )
 }
