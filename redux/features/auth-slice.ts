@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 type InitialState = {
     value: AuthState
@@ -6,7 +6,7 @@ type InitialState = {
 
 type AuthState = {
     isAuth: boolean
-    username: string
+    number: string
     password: string
     name: string
     email: string
@@ -15,11 +15,11 @@ type AuthState = {
 const initialState = {
     value: {
         isAuth: false,
-        username: '',
+        number: '',
         password: '',
         name: '',
         email: ''
-    } as AuthState
+    } as AuthState[]
 } as InitialState
 
 export const auth = createSlice({
@@ -32,8 +32,12 @@ export const auth = createSlice({
         signOut: () => {
             return initialState
         },
-        signUp: () => {
-
+        signUp: (state = initialState, action: PayloadAction<AuthState>) => {
+            console.log(action.payload)
+            return {
+                ...state,
+                value: action.payload
+            }
         },
         restore: () => {
 
