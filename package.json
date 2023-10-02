@@ -9,15 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/next-js": "^2.1.5",
+    "@chakra-ui/react": "^2.8.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@reduxjs/toolkit": "^1.9.6",
+    "framer-motion": "^10.16.4",
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "react-hook-form": "^7.47.0",
     "react-redux": "^8.1.2"
-  },
-  "resolutions": {
-    "@chakra-ui": "latest",
-    "react-hook-form": "latest"
   },
   "devDependencies": {
     "@types/node": "latest",
