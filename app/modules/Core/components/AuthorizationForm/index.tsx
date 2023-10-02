@@ -16,10 +16,20 @@ import {
 import NextLink from 'next/link'
 import { useForm, Controller } from "react-hook-form"
 import {useState} from "react"
+import PhoneInput from "../PhoneInput/index";
+import { useRouter } from "next/navigation";
+import {useStore} from "react-redux";
 
 export default function AuthorizationForm() {
     const [show, setShow] = useState(false)
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [numberExists, setNumberExists] = useState(false)
+    const [passwordExists, setPasswordExists] = useState(false)
+    const store = useStore()
+    const accounts = store.getState().authReducer.value
+    console.log(accounts)
 
+    const router = useRouter()
     const {
         handleSubmit,
         register,
@@ -29,14 +39,61 @@ export default function AuthorizationForm() {
         mode: 'onChange'
     })
 
-    const onSubmit = (values) => {
-        return new Promise((resolve) => {
+    const onSubmit = (values: any) => {
+        return new Promise<void>((resolve) => {
             setTimeout(() => {
                 alert(JSON.stringify(values, null, 2))
+                router.push('/success')
                 resolve()
             }, 3000)
         })
     }
+
+    const formatPhoneNumber = (input) => {
+        const numericInput = input.replace(/\D/g, '');
+
+        let formattedNumber = '+';
+        for (let i = 0; i < numericInput.length; i++) {
+            if (i === 1 || i === 4 || i === 7 || i === 9) {
+                if(i === 4) {
+                    formattedNumber += ')'
+                }
+                formattedNumber += ' ';
+                if(i === 1) {
+                    formattedNumber += '('
+                }
+            }
+            formattedNumber += numericInput[i];
+        }
+
+        return formattedNumber;
+    };
+
+    const handleChange = (event) => {
+        const input = event.target.value;
+        const formattedValue = formatPhoneNumber(input).substring(0, 18);
+        setPhoneNumber(formattedValue);
+    };
+
+    const numberExistsInRedux = (phoneNumber) => {
+
+        // Check if the phone number exists in the Redux store
+        const existsInStore = accounts.some((account) => account.number === phoneNumber);
+
+        // Check the format of the phone number
+        const validFormat = /\+\d\s\([0-9]+\)\s[0-9]+\s[0-9]+\s\d\d/i.test(phoneNumber);
+        setNumberExists(existsInStore)
+        return existsInStore && validFormat;
+    };
+
+    const passwordExistsInRedux = (password) => {
+
+        // Check if the phone number exists in the Redux store
+        const existsInStore = accounts.some((account) => account.password === password);
+
+        setPasswordExists(existsInStore)
+        return existsInStore;
+    };
 
     return (
         <Card>
@@ -52,7 +109,7 @@ export default function AuthorizationForm() {
                                    <Controller
                                        name='number'
                                        control={control}
-                                       defaultValue=""
+                                       defaultValue=''
                                        rules={{
                                            required: 'Phone number is required',
                                            pattern: {
@@ -61,13 +118,14 @@ export default function AuthorizationForm() {
                                            },
                                            minLength: { value: 11, message: 'Number must be of the following format: +7 (777) 777 77 77' },
                                            maxLength: { value: 18, message: 'Number must be of the following format: +7 (777) 777 77 77'},
+                                           validate: numberExistsInRedux
                                        }}
                                        render={({ field }) => (
-                                           <Input {...field} placeholder='+7 (777) 777 77 77' />
+                                           <Input {...field} placeholder='+7 (777) 777 77 77'/>
                                        )}/>
-                               <FormErrorMessage>
-                                   {errors.number && errors.number.message}
-                               </FormErrorMessage>
+                                   <FormErrorMessage>
+                                       {errors.number && errors.number.message}
+                                   </FormErrorMessage>
                                </FormControl>
                            </Flex>
                            {!errors.number && (
@@ -81,6 +139,7 @@ export default function AuthorizationForm() {
                                                   {...register('password', {
                                                       required: 'Password is required',
                                                       minLength: { value: 5, message: 'Your password must be at least 5 characters long' },
+                                                      validate: passwordExistsInRedux
                                                   })}
                                            />
                                            <InputRightElement width='4.5rem'>
@@ -101,8 +160,8 @@ export default function AuthorizationForm() {
                        <Link as={NextLink} href='/restore'>
                            Forgot your password?
                        </Link>
-                           {!errors.number ? <Button type='submit' colorScheme='teal'>Login</Button> :
-                               <Button type='submit' colorScheme='teal'>Register</Button>}
+                           {(!errors.number && numberExists && passwordExists) ? <Button type='submit' colorScheme='teal'>Login</Button> :
+                               <Button type='submit' colorScheme='teal' onClick={() => router.push('/register')}>Register</Button>}
                        </Flex>
                    </Flex>
                    </form>
