@@ -16,9 +16,12 @@ import {
 import NextLink from 'next/link'
 import { useForm, Controller } from "react-hook-form"
 import {useState} from "react"
+import PhoneInput from "../PhoneInput/index";
+import { useRouter } from "next/navigation";
 
 export default function AuthorizationForm() {
     const [show, setShow] = useState(false)
+    const router = useRouter()
 
     const {
         handleSubmit,
@@ -29,10 +32,11 @@ export default function AuthorizationForm() {
         mode: 'onChange'
     })
 
-    const onSubmit = (values) => {
-        return new Promise((resolve) => {
+    const onSubmit = (values: any) => {
+        return new Promise<void>((resolve) => {
             setTimeout(() => {
                 alert(JSON.stringify(values, null, 2))
+                router.push('/success')
                 resolve()
             }, 3000)
         })
@@ -48,7 +52,7 @@ export default function AuthorizationForm() {
                        <Flex direction='column' gap='16px'>
                            <Flex direction='column' gap='4px'>
                                <Text>Your number</Text>
-                               <FormControl isInvalid={errors.number}>
+                               <FormControl isInvalid={!!errors.number}>
                                    <Controller
                                        name='number'
                                        control={control}
@@ -57,16 +61,15 @@ export default function AuthorizationForm() {
                                            required: 'Phone number is required',
                                            pattern: {
                                                value: /\+\d\s\([0-9]+\)\s[0-9]+\s[0-9]+\s\d\d/i,
-                                               message: 'Invalid number format',
+                                               message: 'Number must be of the following format: +7 (777) 777 77 77',
                                            },
-                                           minLength: { value: 11, message: 'Number must be of the following format: +7 (777) 777 77 77' },
-                                           maxLength: { value: 18, message: 'Number must be of the following format: +7 (777) 777 77 77'},
+                                           maxLength: { value: 18, message: 'Number must be at most 18 characters long' },
                                        }}
                                        render={({ field }) => (
-                                           <Input {...field} placeholder='+7 (777) 777 77 77' />
+                                           <PhoneInput {...field} placeholder='+7 (777) 777 77 77'/>
                                        )}/>
                                <FormErrorMessage>
-                                   {errors.number && errors.number.message}
+                                   {!!errors.number && errors.number.message}
                                </FormErrorMessage>
                                </FormControl>
                            </Flex>
@@ -102,7 +105,7 @@ export default function AuthorizationForm() {
                            Forgot your password?
                        </Link>
                            {!errors.number ? <Button type='submit' colorScheme='teal'>Login</Button> :
-                               <Button type='submit' colorScheme='teal'>Register</Button>}
+                               <Button type='submit' colorScheme='teal' onClick={() => router.push('/register')}>Register</Button>}
                        </Flex>
                    </Flex>
                    </form>

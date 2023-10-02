@@ -9,14 +9,16 @@ import {
     FormErrorMessage,
     Heading,
     Input,
-    InputGroup, InputRightElement,
+    InputGroup, InputRightElement, Link,
     Text
 } from "@chakra-ui/react";
 import {useState} from "react";
 import {useForm} from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 export default function RestoreForm() {
     const [show, setShow] = useState(false)
+    const router = useRouter()
 
     const {
         handleSubmit,
@@ -25,9 +27,10 @@ export default function RestoreForm() {
     } = useForm()
 
     const onSubmit = (values) => {
-        return new Promise((resolve) => {
+        return new Promise<void>((resolve) => {
             setTimeout(() => {
                 alert(JSON.stringify(values, null, 2))
+                router.push('/')
                 resolve()
             }, 3000)
         })
@@ -85,7 +88,9 @@ export default function RestoreForm() {
                                 </FormControl>
                             </Flex>
                         </Flex>
-                            <Button type='submit' colorScheme='teal'>Restore</Button>
+                            <Button type='submit' colorScheme='teal'>
+                                Restore
+                            </Button>
                     </Flex>
                     </form>
                 </Flex>
