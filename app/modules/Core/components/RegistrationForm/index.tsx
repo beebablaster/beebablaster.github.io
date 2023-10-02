@@ -12,16 +12,17 @@ import {
     Input, InputGroup, InputRightElement,
     Text
 } from "@chakra-ui/react";
-import {useDispatch, useStore} from "react-redux";
+import {useDispatch} from "react-redux";
 import {signUp} from "../../../../../redux/features/auth-slice";
 import {AuthState} from "../../../../../redux/features/auth-slice";
 import {AppDispatch} from "../../../../../redux/store";
 import {useState} from "react";
-import {useForm} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import { useRouter } from "next/navigation";
 
 export default function RegistrationForm() {
     const dispatch = useDispatch<AppDispatch>()
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [show, setShow] = useState(false)
     const [checkboxIsClicked, setCheckboxIsClicked] = useState(false)
     const router = useRouter()
@@ -29,6 +30,7 @@ export default function RegistrationForm() {
     const {
         handleSubmit,
         register,
+        control,
         formState: { errors, isValid },
     } = useForm()
 
@@ -43,6 +45,33 @@ export default function RegistrationForm() {
         })
     }
 
+    const formatPhoneNumber = (input) => {
+        const numericInput = input.replace(/\D/g, '');
+
+        let formattedNumber = '+';
+        for (let i = 0; i < numericInput.length; i++) {
+            if (i === 1 || i === 4 || i === 7 || i === 9) {
+                if(i === 4) {
+                    formattedNumber += ')'
+                }
+                formattedNumber += ' ';
+                if(i === 1) {
+                    formattedNumber += '('
+                }
+            }
+            formattedNumber += numericInput[i];
+        }
+
+        return formattedNumber;
+    };
+
+    const handleChange = (event) => {
+        const input = event.target.value;
+        const formattedValue = formatPhoneNumber(input).substring(0, 18);
+        setPhoneNumber(formattedValue);
+        event.target.value = formattedValue;
+    };
+
     return (
         <Card>
             <CardBody>
@@ -54,18 +83,25 @@ export default function RegistrationForm() {
                             <Flex direction='column' gap='4px'>
                                 <Text>Your number</Text>
                                 <FormControl isInvalid={errors.number}>
-                                    <Input id='number'
-                                           placeholder='+7 (777) 777 77 77'
-                                           {...register('number', {
-                                               required: 'Phone number is required',
-                                               pattern: {
-                                                   value: /\+\d\s\([0-9]+\)\s[0-9]+\s[0-9]+\s\d\d/i,
-                                                   message: 'Invalid number format',
-                                               },
-                                               minLength: { value: 11, message: 'Number must be of the following format: +7 (777) 777 77 77' },
-                                               maxLength: { value: 18, message: 'Number must be of the following format: +7 (777) 777 77 77'},
-                                           })}
-                                    />
+                                    <Controller
+                                        name='number'
+                                        control={control}
+                                        defaultValue=''
+                                        rules={{
+                                            required: 'Phone number is required',
+                                            pattern: {
+                                                value: /\+\d\s\([0-9]+\)\s[0-9]+\s[0-9]+\s\d\d/i,
+                                                message: 'Invalid number format',
+                                            },
+                                            minLength: { value: 11, message: 'Number must be of the following format: +7 (777) 777 77 77' },
+                                            maxLength: { value: 18, message: 'Number must be of the following format: +7 (777) 777 77 77'},
+                                        }}
+                                        render={({ field }) => (
+                                            <Input {...field} placeholder='+7 (777) 777 77 77' onChange={(e) => {
+                                                handleChange(e)
+                                                field.onChange(e)
+                                            }}/>
+                                        )}/>
                                     <FormErrorMessage>
                                         {errors.number && errors.number.message}
                                     </FormErrorMessage>
