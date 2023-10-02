@@ -18,7 +18,6 @@ import {AuthState} from "../../../../../redux/features/auth-slice";
 import {AppDispatch} from "../../../../../redux/store";
 import {useState} from "react";
 import {useForm} from "react-hook-form";
-import PhoneInput from "../PhoneInput/index";
 import { useRouter } from "next/navigation";
 
 export default function RegistrationForm() {
@@ -26,7 +25,6 @@ export default function RegistrationForm() {
     const [show, setShow] = useState(false)
     const [checkboxIsClicked, setCheckboxIsClicked] = useState(false)
     const router = useRouter()
-    const store = useStore()
 
     const {
         handleSubmit,
@@ -39,10 +37,9 @@ export default function RegistrationForm() {
             setTimeout(() => {
                 const payload = values as AuthState
                 dispatch(signUp(payload))
-                alert(JSON.stringify(values, null, 2))
                 router.push('/success')
                 resolve()
-            }, 3000)
+            }, 1000)
         })
     }
 
@@ -56,7 +53,6 @@ export default function RegistrationForm() {
                         <Flex direction='column' gap='16px'>
                             <Flex direction='column' gap='4px'>
                                 <Text>Your number</Text>
-                                <PhoneInput/>
                                 <FormControl isInvalid={errors.number}>
                                     <Input id='number'
                                            placeholder='+7 (777) 777 77 77'

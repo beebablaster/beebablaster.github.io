@@ -9,14 +9,19 @@ import {
     FormErrorMessage,
     Heading,
     Input,
-    InputGroup, InputRightElement, Link,
+    InputGroup, InputRightElement,
     Text
 } from "@chakra-ui/react";
 import {useState} from "react";
 import {useForm} from "react-hook-form";
 import { useRouter } from "next/navigation";
+import {restore} from "../../../../../redux/features/auth-slice";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../../../../../redux/store";
+
 
 export default function RestoreForm() {
+    const dispatch = useDispatch<AppDispatch>()
     const [show, setShow] = useState(false)
     const router = useRouter()
 
@@ -29,10 +34,10 @@ export default function RestoreForm() {
     const onSubmit = (values) => {
         return new Promise<void>((resolve) => {
             setTimeout(() => {
-                alert(JSON.stringify(values, null, 2))
+                dispatch(restore(values))
                 router.push('/')
                 resolve()
-            }, 3000)
+            }, 1000)
         })
     }
 
