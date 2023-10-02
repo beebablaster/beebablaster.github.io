@@ -29,7 +29,7 @@ export const auth = createSlice({
         },
         restore: (state, action: PayloadAction<RestoreState>) => {
                 const accountId = state.value.findIndex((account) => account.number == action.payload.number)
-                if(accountId) state.value[accountId].password = action.payload.password
+                state.value[accountId].password = action.payload.password
         }
     }
 })
