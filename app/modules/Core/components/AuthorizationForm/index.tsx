@@ -16,7 +16,6 @@ import {
 import NextLink from 'next/link'
 import { useForm, Controller } from "react-hook-form"
 import {useState} from "react"
-import PhoneInput from "../PhoneInput/index";
 import { useRouter } from "next/navigation";
 import {useStore} from "react-redux";
 
@@ -27,7 +26,6 @@ export default function AuthorizationForm() {
     const [passwordExists, setPasswordExists] = useState(false)
     const store = useStore()
     const accounts = store.getState().authReducer.value
-    console.log(accounts)
 
     const router = useRouter()
     const {
@@ -42,10 +40,9 @@ export default function AuthorizationForm() {
     const onSubmit = (values: any) => {
         return new Promise<void>((resolve) => {
             setTimeout(() => {
-                alert(JSON.stringify(values, null, 2))
                 router.push('/success')
                 resolve()
-            }, 3000)
+            }, 1000)
         })
     }
 
@@ -76,19 +73,14 @@ export default function AuthorizationForm() {
     };
 
     const numberExistsInRedux = (phoneNumber) => {
-
-        // Check if the phone number exists in the Redux store
         const existsInStore = accounts.some((account) => account.number === phoneNumber);
 
-        // Check the format of the phone number
         const validFormat = /\+\d\s\([0-9]+\)\s[0-9]+\s[0-9]+\s\d\d/i.test(phoneNumber);
         setNumberExists(existsInStore)
         return existsInStore && validFormat;
     };
 
     const passwordExistsInRedux = (password) => {
-
-        // Check if the phone number exists in the Redux store
         const existsInStore = accounts.some((account) => account.password === password);
 
         setPasswordExists(existsInStore)
