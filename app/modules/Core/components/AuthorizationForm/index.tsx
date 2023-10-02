@@ -70,6 +70,7 @@ export default function AuthorizationForm() {
         const input = event.target.value;
         const formattedValue = formatPhoneNumber(input).substring(0, 18);
         setPhoneNumber(formattedValue);
+        event.target.value = formattedValue;
     };
 
     const numberExistsInRedux = (phoneNumber) => {
@@ -113,7 +114,10 @@ export default function AuthorizationForm() {
                                            validate: numberExistsInRedux
                                        }}
                                        render={({ field }) => (
-                                           <Input {...field} placeholder='+7 (777) 777 77 77'/>
+                                           <Input {...field} placeholder='+7 (777) 777 77 77' onChange={(e) => {
+                                               handleChange(e)
+                                               field.onChange(e)
+                                           }}/>
                                        )}/>
                                    <FormErrorMessage>
                                        {errors.number && errors.number.message}
