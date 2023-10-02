@@ -12,7 +12,7 @@ import {
     Input, InputGroup, InputRightElement,
     Text
 } from "@chakra-ui/react";
-import {useDispatch} from "react-redux";
+import {useDispatch, useStore} from "react-redux";
 import {signUp} from "../../../../../redux/features/auth-slice";
 import {AuthState} from "../../../../../redux/features/auth-slice";
 import {AppDispatch} from "../../../../../redux/store";
@@ -26,6 +26,7 @@ export default function RegistrationForm() {
     const [show, setShow] = useState(false)
     const [checkboxIsClicked, setCheckboxIsClicked] = useState(false)
     const router = useRouter()
+    const store = useStore()
 
     const {
         handleSubmit,
